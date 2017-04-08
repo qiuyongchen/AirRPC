@@ -9,8 +9,9 @@
         <artifactId>AirRPC</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <artifactId>AirRPC-netty</artifactId>
+    
+    <artifactId>AirRPC-zookeeper</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    
 </project>

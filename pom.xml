@@ -32,6 +32,7 @@
         <module>AirRPC-all</module>
         <module>AirRPC-core</module>
         <module>AirRPC-netty</module>
+        <module>AirRPC-zookeeper</module>
     </modules>
 
     <dependencyManagement>
