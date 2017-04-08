@@ -19,7 +19,7 @@ public class AirClientFactory {
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(5);
 
     private static ConcurrentHashMap<ServerParam, AirClient> clients = new ConcurrentHashMap<>(5);
-    
+
     public static AirClient getAirClient(ServerParam serverParam) {
         AirClient airClient = clients.get(serverParam);
         if (airClient != null) {

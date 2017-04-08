@@ -8,6 +8,8 @@
     <artifactId>AirRPC</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
     <properties>
         <log4j.version>2.8.1</log4j.version>
         <slf4j.version>1.7.24</slf4j.version>
@@ -36,6 +38,8 @@
         <module>AirRPC-core</module>
         <module>AirRPC-netty</module>
         <module>AirRPC-zookeeper</module>
+        <module>sample-client</module>
+        <module>sample-server</module>
     </modules>
 
     <dependencyManagement>

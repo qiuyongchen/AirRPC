@@ -37,7 +37,7 @@ public class AirClient {
     /**
      * 启动一个netty客户端
      */
-    public void activate(EventLoopGroup group, final ServerParam serverParam) {
+    void activate(EventLoopGroup group, final ServerParam serverParam) {
         if (isActive) {
             return;
         }
@@ -71,15 +71,15 @@ public class AirClient {
         // 关闭TCP DELAY ACK，不延迟 Ack 包的发送，以追求速度
         bootstrap.option(ChannelOption.TCP_NODELAY, true);
         try {
-            channelFuture = bootstrap.bind(serverParam.getIp(),Integer.valueOf(serverParam.getPort())).sync()
+            channelFuture = bootstrap.connect(serverParam.getIp(),Integer.valueOf(serverParam.getPort())).sync()
                     .addListener(new ChannelFutureListener() {
                         @Override
                         public void operationComplete(ChannelFuture future) throws Exception {
                             log.info("启动netty客户端成功，serverParam: {}", serverParam);
                         }
                     });
-        } catch (InterruptedException e) {
-            log.error("启动netty客户端失败，serverParam: {}", serverParam);
+        } catch (Exception e) {
+            log.error("启动netty客户端失败，serverParam: {}", serverParam, e);
         }
         // 成功启动netty客户端，且连接netty服务端
         if (channelFuture != null && channelFuture.isSuccess()) {
