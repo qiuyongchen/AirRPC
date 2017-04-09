@@ -35,10 +35,12 @@
 
     <modules>
         <module>AirRPC-all</module>
-        <module>AirRPC-core</module>
+        <module>AirRPC-common</module>
         <module>AirRPC-netty</module>
         <module>AirRPC-zookeeper</module>
+        <module>AirRPC-core</module>
         <module>sample-client</module>
+        <module>sample-api</module>
         <module>sample-server</module>
     </modules>
 
@@ -103,6 +105,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.3.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
             </dependency>
 
             <dependency>

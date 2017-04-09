@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>com.iloveqyc</groupId>
-            <artifactId>AirRPC-core</artifactId>
+            <artifactId>AirRPC-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -32,6 +32,12 @@
         <dependency>
             <groupId>com.iloveqyc</groupId>
             <artifactId>AirRPC-netty</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iloveqyc</groupId>
+            <artifactId>AirRPC-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
