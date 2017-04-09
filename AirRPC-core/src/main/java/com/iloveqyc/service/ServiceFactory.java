@@ -1,7 +1,9 @@
 package com.iloveqyc.service;
 
+import com.iloveqyc.bean.InvokerParam;
 import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
+import com.iloveqyc.service.proxy.RemotingServiceProxyFactory;
 
 import java.util.List;
 
@@ -13,8 +15,18 @@ import java.util.List;
  */
 public class ServiceFactory {
 
-    public static Object getService(String iface, String serviceName, String serviceName1) {
-        return null;
+    private static RemotingServiceProxyFactory remotingServiceProxyFactory;
+
+    static {
+        remotingServiceProxyFactory = new RemotingServiceProxyFactory();
+    }
+
+    public static Object getService(String iface, String serviceName, Class<?> serviceClass) {
+        InvokerParam invokerParam = new InvokerParam();
+        invokerParam.setIface(iface);
+        invokerParam.setServiceName(serviceName);
+        invokerParam.setServiceClass(serviceClass);
+        return remotingServiceProxyFactory.getProxy(invokerParam);
     }
 
     public static void addServices(List<ProviderParam> providerParams, ServerParam serverParam) {

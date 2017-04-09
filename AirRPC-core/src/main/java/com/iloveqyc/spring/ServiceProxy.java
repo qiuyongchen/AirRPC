@@ -41,7 +41,7 @@ public class ServiceProxy implements FactoryBean {
      */
     public void init() {
         serviceClass = AirClassUtil.getClass(iface);
-        serviceInstance = ServiceFactory.getService(iface, serviceName, serviceName);
+        serviceInstance = ServiceFactory.getService(iface, serviceName, serviceClass);
     }
 
     @Override

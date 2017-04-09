@@ -16,4 +16,10 @@
         <property name="serviceName" value="http://www.iloveqyc.com/service/iLoveYouService_1.0.0"/>
     </bean>
 
+    <!--测试获取代理的工厂类-->
+    <bean id="iLoveYouService2" class="com.iloveqyc.spring.ServiceProxy" init-method="init">
+        <property name="iface" value="com.iloveqyc.sample.api.ILoveYouService"/>
+        <property name="serviceName" value="http://www.iloveqyc.com/service/iLoveYouService_1.0.0"/>
+    </bean>
+
 </beans>
