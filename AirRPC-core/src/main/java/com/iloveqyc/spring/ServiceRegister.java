@@ -21,13 +21,13 @@ public class ServiceRegister {
      *   String:服务的名称，serviceName
      *   Object:服务的实例
      */
-    private Map<String, Object> services;
+    public Map<String, Object> services;
 
     public void init() {
 
         // 获取服务器配置
         // TODO 本地appenv加载ip
-        ServerParam serverParam = new ServerParam("192.168.100.104", "4080");
+        ServerParam serverParam = new ServerParam("127.0.0.1","4080");
 
         // 获取所有的服务提供者配置（来自xml文件）
         List<ProviderParam> providerParams = getAllProvider();
@@ -45,4 +45,7 @@ public class ServiceRegister {
         return providerParams;
     }
 
+    public void setServices(Map<String, Object> services) {
+        this.services = services;
+    }
 }

@@ -33,7 +33,7 @@ public class ServiceInvocationHandler implements InvocationHandler {
         AirRequest request = buildRequest(method, args);
 
         // TODO 加入zookeeper
-        ServerParam serverParam = new ServerParam("192.168.100.104", "4080");
+        ServerParam serverParam = new ServerParam("127.0.0.1","4080");
         AirClient airClient = AirClientFactory.getAirClient(serverParam);
 
         AirResponse response = airClient.sendRequest(request);

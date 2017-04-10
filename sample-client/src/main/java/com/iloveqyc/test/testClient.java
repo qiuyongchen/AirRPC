@@ -4,6 +4,10 @@ import com.iloveqyc.sample.api.ILoveYouService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * User: qiuyongchen Nicolas.David
  * Date: 2017/4/9
@@ -12,10 +16,21 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class testClient {
 
+    static int i = 10000;
+
     public static void main(String[] args) {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("AirClient.xml");
-        ILoveYouService iLoveYouService = (ILoveYouService) applicationContext.getBean("iLoveYouService");
-        System.out.println(iLoveYouService.iLoveYou("s", "sdf"));
+        final ILoveYouService iLoveYouService = (ILoveYouService) applicationContext.getBean("iLoveYouService");
+        System.out.println(iLoveYouService.iLoveYou("邱永臣", "陆莎"));
+
+//        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 1000L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100000));
+//
+//        long beginTime = System.currentTimeMillis();
+//        for (int j = 0; j < 100000; j++) {
+//            iLoveYouService.iLoveYou("邱永臣", "陆莎");
+//            System.out.println(j);
+//        }
+//        System.out.println("平均响应时间(ms)：" + (System.currentTimeMillis() - beginTime) / 100000.0);
 
 //        ServerParam serverParam = new ServerParam();
 //        serverParam.setIp("192.168.100.112");

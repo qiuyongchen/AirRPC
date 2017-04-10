@@ -6,6 +6,7 @@ import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
 import com.iloveqyc.codez.AirDecoder;
 import com.iloveqyc.codez.AirEncoder;
+import com.iloveqyc.provider.process.RequestDealerFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: qiuyongchen Nicolas.David
@@ -36,14 +39,14 @@ public class AirServer {
     private boolean isActivated;
 
     // 此netty服务器承载的所有服务
-    List<ProviderParam> providerParams;
+    Map<String, ProviderParam> providerParamsMap = new ConcurrentHashMap<>();
 
     /**
      * 启动Netty服务端
      * @param providerParams
      * @param serverParam 服务器的参数
      */
-    public void active(List<ProviderParam> providerParams, ServerParam serverParam) {
+    public void active(final List<ProviderParam> providerParams, ServerParam serverParam) {
 
         // spring初始化bean时仅会在同一个线程中初始化，故无需考虑多个AirServer同时被调用active方法
         if (isActivated) {
@@ -55,7 +58,9 @@ public class AirServer {
         worker = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
 
-        this.providerParams = providerParams;
+        for (ProviderParam param : providerParams) {
+            providerParamsMap.put(param.getServiceName(), param);
+        }
 
         // 将boss组和worker组绑定在Netty上下文里
         bootstrap.group(boss, worker);
@@ -78,7 +83,7 @@ public class AirServer {
                 pipeline.addLast(new SimpleChannelInboundHandler<AirRequest>() {
                     @Override
                     protected void channelRead0(ChannelHandlerContext ctx, AirRequest request) throws Exception {
-                        doProcess(ctx.channel(), request);
+                        doProcess(ctx.channel(), request, providerParamsMap);
                     }
                 });
 
@@ -110,31 +115,12 @@ public class AirServer {
      * 处理request
      * @param channel
      * @param request
+     * @param providerParams
      */
-    private void doProcess(Channel channel, AirRequest request) {
-        // TODO 处理请求
-        log.info("get a request:{}", request);
-        final AirResponse response = new AirResponse();
-        response.setRequestId(request.getRequestId());
-        Set<String> allServiceName = new LinkedHashSet<>();
-        for (ProviderParam param : providerParams) {
-            allServiceName.add(param.getServiceName());
-        }
-        if (allServiceName.contains(request.getServiceName())) {
-            response.setResult("本服务端提供该service!");
-        } else {
-            response.setResult("警告！你在请求不存在的服务！");
-        }
-
-        // 将response传回客户端
-        ChannelFuture future = channel.writeAndFlush(response);
-        // 监听回传结果，完成时输出日志
-        future.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                log.info("from future: {}, response: {} write complete", future, response);
-            }
-        });
+    private void doProcess(Channel channel, AirRequest request, Map<String, ProviderParam> providerParams) {
+        String serviceName = request.getServiceName();
+        ProviderParam param = providerParamsMap.get(serviceName);
+        RequestDealerFactory.getRequestDealer().dealRequest(channel, request, param);
     }
 
 }

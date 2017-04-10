@@ -17,7 +17,7 @@ public class ServerContainer {
     AirServer airServer;
 
     public ServerContainer() {
-        ServerParam serverParam = new ServerParam("192.168.100.104", "4080");
+        ServerParam serverParam = new ServerParam("127.0.0.1","4080");
         airServer = new AirServer();
         ProviderParam param = new ProviderParam();
         param.setServiceName("http://www.iloveqyc.com/service/iLoveYouService_1.0.0");

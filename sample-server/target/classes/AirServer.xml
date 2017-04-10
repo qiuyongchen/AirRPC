@@ -12,7 +12,7 @@
     <!-- 打开Spring的Annotation支持 -->
     <context:annotation-config/>
 
-    <bean id="helloService" class="com.iloveqyc.test.ServerContainer"/>
+    <!--<bean id="helloService" class="com.iloveqyc.test.ServerContainer"/>-->
 
     <!--<bean id="helloService" class="com.fox.rpc.spring.ServiceProxy" init-method="init">-->
     <!--<property name="iface" value="com.dianping.HelloService"/>-->
@@ -20,7 +20,15 @@
     <!--<property name="serializer" value="hessian"/>-->
     <!--</bean>-->
 
+    <bean id="iLoveYouService" class="com.iloveqyc.test.service.Impl.ILoveYouServiceImpl"/>
 
+    <bean id="myServer" class="com.iloveqyc.spring.ServiceRegister" init-method="init">
+        <property name="services">
+            <map>
+                <entry key="http://www.iloveqyc.com/service/iLoveYouService_1.0.0" value-ref="iLoveYouService"/>
+            </map>
+        </property>
+    </bean>
 
 
 </beans>
