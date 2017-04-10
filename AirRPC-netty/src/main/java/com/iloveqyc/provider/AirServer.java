@@ -2,6 +2,7 @@ package com.iloveqyc.provider;
 
 import com.iloveqyc.bean.AirRequest;
 import com.iloveqyc.bean.AirResponse;
+import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
 import com.iloveqyc.codez.AirDecoder;
 import com.iloveqyc.codez.AirEncoder;
@@ -13,30 +14,48 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * User: qiuyongchen Nicolas.David
  * Date: 2017/4/8
  * Time: 下午6:31
- * Usage: 管理Netty的服务端，包括启动、停止等
+ * Usage: Netty服务端，包括启动、停止等
  */
 @Data
 @Slf4j
-public class AirServerManager {
+public class AirServer {
 
     private EventLoopGroup boss;
     private EventLoopGroup worker;
     private ServerBootstrap bootstrap;
 
+    // 服务端是否已经启动
+    private boolean isActivated;
+
+    // 此netty服务器承载的所有服务
+    List<ProviderParam> providerParams;
+
     /**
      * 启动Netty服务端
+     * @param providerParams
      * @param serverParam 服务器的参数
      */
-    public void active(ServerParam serverParam) {
+    public void active(List<ProviderParam> providerParams, ServerParam serverParam) {
+
+        // spring初始化bean时仅会在同一个线程中初始化，故无需考虑多个AirServer同时被调用active方法
+        if (isActivated) {
+            return;
+        }
         log.info("尝试启动server: {}", serverParam);
 
         boss = new NioEventLoopGroup();
         worker = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
+
+        this.providerParams = providerParams;
 
         // 将boss组和worker组绑定在Netty上下文里
         bootstrap.group(boss, worker);
@@ -78,10 +97,12 @@ public class AirServerManager {
                         @Override
                         public void operationComplete(ChannelFuture future) throws Exception {
                             log.info("netty启动成功");
+                            isActivated = true;
                         }
                     });
         } catch (InterruptedException e) {
             log.error("绑定ip和端口，并启动netty，失败", e);
+            return;
         }
     }
 
@@ -95,7 +116,15 @@ public class AirServerManager {
         log.info("get a request:{}", request);
         final AirResponse response = new AirResponse();
         response.setRequestId(request.getRequestId());
-        response.setResult("这是来自邱永臣的回复，好好珍惜");
+        Set<String> allServiceName = new LinkedHashSet<>();
+        for (ProviderParam param : providerParams) {
+            allServiceName.add(param.getServiceName());
+        }
+        if (allServiceName.contains(request.getServiceName())) {
+            response.setResult("本服务端提供该service!");
+        } else {
+            response.setResult("警告！你在请求不存在的服务！");
+        }
 
         // 将response传回客户端
         ChannelFuture future = channel.writeAndFlush(response);

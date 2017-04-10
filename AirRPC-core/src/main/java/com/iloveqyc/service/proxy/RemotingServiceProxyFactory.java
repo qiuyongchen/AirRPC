@@ -28,7 +28,7 @@ public class RemotingServiceProxyFactory {
         if (serviceProxy != null) {
             return serviceProxy;
         }
-        ServiceInvocationHandler invocationHandler = new ServiceInvocationHandler();
+        ServiceInvocationHandler invocationHandler = new ServiceInvocationHandler(invokerParam);
         serviceProxy = Proxy.newProxyInstance(invokerParam.getClass().getClassLoader(),
                 new Class<?>[]{invokerParam.getServiceClass()},invocationHandler);
         proxys.put(invokerParam, serviceProxy);

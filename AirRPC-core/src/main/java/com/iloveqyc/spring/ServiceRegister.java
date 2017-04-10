@@ -26,9 +26,8 @@ public class ServiceRegister {
     public void init() {
 
         // 获取服务器配置
-        ServerParam serverParam = new ServerParam();
-        serverParam.setIp("xxx"); // TODO 配置化ip
-        serverParam.setPort("xxx"); // TODO 配置化端口
+        // TODO 本地appenv加载ip
+        ServerParam serverParam = new ServerParam("192.168.100.104", "4080");
 
         // 获取所有的服务提供者配置（来自xml文件）
         List<ProviderParam> providerParams = getAllProvider();
@@ -39,7 +38,7 @@ public class ServiceRegister {
         List<ProviderParam> providerParams = new ArrayList<>();
         for (String serviceName : services.keySet()) {
             ProviderParam provider = new ProviderParam();
-            provider.setServiceName(serviceName);;
+            provider.setServiceName(serviceName);
             provider.setServiceInstance(services.get(serviceName));
             providerParams.add(provider);
         }

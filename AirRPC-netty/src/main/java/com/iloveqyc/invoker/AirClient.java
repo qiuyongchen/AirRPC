@@ -28,7 +28,7 @@ public class AirClient {
     // 连接的上下文（建立连接后，该上下文一直有效）
     private ChannelFuture channelFuture;
 
-    // 连接是否已建立
+    // 客户端是否已启动
     private boolean isActive;
 
     // 存储某个request和其response

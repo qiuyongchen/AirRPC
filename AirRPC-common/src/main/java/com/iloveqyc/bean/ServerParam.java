@@ -1,5 +1,6 @@
 package com.iloveqyc.bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -14,4 +15,9 @@ public class ServerParam {
     private String ip;
 
     private String port;
+
+    public ServerParam(String ip, String port) {
+        this.ip = ip;
+        this.port = port;
+    }
 }

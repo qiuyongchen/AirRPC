@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * User: qiuyongchen Nicolas.David
  * Date: 2017/4/9
  * Time: 上午12:51
- * Usage: 生成与获取netty客户端的工厂
+ * Usage: 生成与获取netty客户端的工厂，理论上可以生成多个netty客户端
  */
 public class AirClientFactory {
 
