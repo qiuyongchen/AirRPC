@@ -2,7 +2,9 @@ package com.iloveqyc.spring;
 
 import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
+import com.iloveqyc.constants.PropertyConstant;
 import com.iloveqyc.service.ServiceFactory;
+import com.iloveqyc.utils.ConfigLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,7 @@ public class ServiceRegister {
     public void init() {
 
         // 获取服务器配置
-        // TODO 本地appenv加载ip
-        ServerParam serverParam = new ServerParam("127.0.0.1","4080");
+        ServerParam serverParam = new ServerParam(ConfigLoader.loadPropertyByKey(PropertyConstant.LOCAL_IP),"4080");
 
         // 获取所有的服务提供者配置（来自xml文件）
         List<ProviderParam> providerParams = getAllProvider();

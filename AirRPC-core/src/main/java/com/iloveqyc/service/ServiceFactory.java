@@ -5,6 +5,7 @@ import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
 import com.iloveqyc.provider.AirServerFactory;
 import com.iloveqyc.service.proxy.RemotingServiceProxyFactory;
+import com.iloveqyc.zookeeper.registry.ZookeeperRegistryFactory;
 
 import java.util.List;
 
@@ -42,7 +43,10 @@ public class ServiceFactory {
         AirServerFactory.getAirServer().active(providerParams, serverParam);
     }
 
-    // TODO 发布到zookeeper
     private static void publishServices(List<ProviderParam> providerParams, ServerParam serverParam) {
+        for (ProviderParam providerParam : providerParams) {
+            ZookeeperRegistryFactory.getZkRegistry().registerService(
+                    providerParam.getServiceName(), serverParam);
+        }
     }
 }
