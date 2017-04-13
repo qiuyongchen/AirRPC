@@ -102,7 +102,8 @@ public class ZookeeperClient {
     public void creteEphNode(String path, String value) {
         try {
             byte[] valueBytes = value.toString().getBytes("UTF-8");
-            client.create().withMode(CreateMode.EPHEMERAL).forPath(path, valueBytes);
+            String ephNode = client.create().withMode(CreateMode.EPHEMERAL).forPath(path, valueBytes);
+            log.info("create eph node:{}", ephNode);
         } catch (Exception e) {
             log.error("fail to create ephemeral node, path:{}, value:{}", path, value);
         }

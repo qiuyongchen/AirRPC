@@ -46,8 +46,9 @@ public class ZookeeperRegistry {
         String zkServicePath = zkRootNodePath + "/" + serviceName;
         if (!client.exits(zkServicePath)) {
             client.creteEphNode(zkServicePath, serviceAddress);
-            log.info("zk的服务列表不存在，新建一个临时节点用于存在服务列表, serviceName:{}, new value:{}",
-                    serviceName, serviceAddress);
+            String data = client.get(zkServicePath);
+            log.info("zk的服务列表不存在，新建一个临时节点用于存在服务列表, serviceName:{}, new value:{}, data:{}",
+                    serviceName, serviceAddress, data);
         } else {
             String allAddress = client.get(zkServicePath);
             if (allAddress != null && allAddress.length() > 0) {

@@ -25,7 +25,7 @@
     <bean id="myServer" class="com.iloveqyc.spring.ServiceRegister" init-method="init">
         <property name="services">
             <map>
-                <entry key="http://www.iloveqyc.com/service/iLoveYouService_1.0.0" value-ref="iLoveYouService"/>
+                <entry key="qiuyongcheniLoveYouService1" value-ref="iLoveYouService"/>
             </map>
         </property>
     </bean>

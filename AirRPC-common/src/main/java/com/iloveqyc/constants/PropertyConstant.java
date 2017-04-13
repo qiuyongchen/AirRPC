@@ -10,5 +10,5 @@ public class PropertyConstant {
     public static final String ZKSERVER = "airrpczkserver";
     public static final String LOCAL_IP = "localip";
 
-    public static final String ZK_PATH = "/AirRPC/Service";
+    public static final String ZK_PATH = "/AirRPC/service";
 }
