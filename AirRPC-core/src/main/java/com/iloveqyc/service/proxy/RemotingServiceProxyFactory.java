@@ -1,6 +1,8 @@
 package com.iloveqyc.service.proxy;
 
 import com.iloveqyc.bean.InvokerParam;
+import com.iloveqyc.service.proxy.handler.InvocationHandlerWrapper;
+import com.iloveqyc.zookeeper.registry.ZookeeperRegistryFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
@@ -24,13 +26,17 @@ public class RemotingServiceProxyFactory {
      * TODO 获取的代理类应当可以根据服务提供者的上下线而自动变化，目前默认仅有一个服务提供者
      */
     public Object getProxy(InvokerParam invokerParam) {
+        // 获取接口前先连接zookeeper
+        ZookeeperRegistryFactory.getZkRegistry();
+
         Object serviceProxy = proxys.get(invokerParam);
         if (serviceProxy != null) {
             return serviceProxy;
         }
-        ServiceInvocationHandler invocationHandler = new ServiceInvocationHandler(invokerParam);
+        RemotingServiceProxy remotingServiceProxy = new RemotingServiceProxy(
+                InvocationHandlerWrapper.getFilterInvocationHandler(), invokerParam);
         serviceProxy = Proxy.newProxyInstance(invokerParam.getClass().getClassLoader(),
-                new Class<?>[]{invokerParam.getServiceClass()},invocationHandler);
+                new Class<?>[]{invokerParam.getServiceClass()},remotingServiceProxy);
         proxys.put(invokerParam, serviceProxy);
         return serviceProxy;
     }

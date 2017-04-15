@@ -27,6 +27,6 @@ public class RemotingServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         InvocationContext context = new InvocationContext(invokerParam, method, method.getParameterTypes(), args);
-        return invocationHandler.invoke(invocationHandler, context);
+        return invocationHandler.invoke(context);
     }
 }

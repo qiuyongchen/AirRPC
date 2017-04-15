@@ -11,6 +11,6 @@ import com.iloveqyc.service.proxy.handler.FilterInvocationHandler;
  */
 public interface Filter {
 
-    Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context);
+    Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) throws Exception;
 
 }

@@ -17,6 +17,6 @@ public class LoadBalanceFilter implements Filter {
     @Override
     public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) {
         log.info("调用了LoadBalanceFilter, invocationHandler:{}, context:{}", invocationHandler, context);
-        return null;
+        return invocationHandler.invoke(context);
     }
 }

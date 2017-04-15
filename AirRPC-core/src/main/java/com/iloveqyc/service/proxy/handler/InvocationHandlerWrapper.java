@@ -1,5 +1,6 @@
 package com.iloveqyc.service.proxy.handler;
 
+import com.google.common.collect.Lists;
 import com.iloveqyc.service.proxy.context.InvocationContext;
 import com.iloveqyc.service.proxy.handler.filter.Filter;
 import com.iloveqyc.service.proxy.handler.filter.impl.*;
@@ -16,11 +17,11 @@ public class InvocationHandlerWrapper {
 
     private static FilterInvocationHandler filterInvocationHandler;
 
-    private static List<Filter> filterList;
+    private static List<Filter> filterList = Lists.newArrayList();
 
     private static boolean inited;
 
-    public static void init() {
+    private static void init() {
         if (!inited) {
             synchronized (InvocationHandlerWrapper.class) {
                 if (!inited) {
@@ -35,10 +36,13 @@ public class InvocationHandlerWrapper {
     }
 
     public static FilterInvocationHandler getFilterInvocationHandler() {
+        if (filterInvocationHandler == null) {
+            init();
+        }
         return filterInvocationHandler;
     }
 
-    public static FilterInvocationHandler buildFilterInvocationHandler() {
+    private static FilterInvocationHandler buildFilterInvocationHandler() {
         FilterInvocationHandler previous = null;
 
         // 从后向前，逐渐构建出一条责任链
@@ -47,7 +51,7 @@ public class InvocationHandlerWrapper {
             final Filter filter = filterList.get(i);
             previous = new FilterInvocationHandler() {
                 @Override
-                public Object invoke(InvocationContext context) {
+                public Object invoke(InvocationContext context) throws Exception {
                     // 责任链每个节点除了处理自身逻辑，可以调用下一个节点
                     return filter.invoke(next, context);
                 }

@@ -17,6 +17,6 @@ public class MonitorFilter implements Filter {
     @Override
     public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) {
         log.info("调用了MonitorFilter, invocationHandler:{}, context:{}", invocationHandler, context);
-        return null;
+        return invocationHandler.invoke(context);
     }
 }
