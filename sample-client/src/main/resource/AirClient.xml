@@ -13,7 +13,7 @@
 
     <bean id="iLoveYouService" class="com.iloveqyc.spring.ServiceProxy" init-method="init">
         <property name="iface" value="com.iloveqyc.sample.api.ILoveYouService"/>
-        <property name="serviceName" value="http://www.iloveqyc.com/service/iLoveYouService_1.0.0"/>
+        <property name="serviceName" value="qiuyongcheniLoveYouService1"/>
     </bean>
 
 </beans>

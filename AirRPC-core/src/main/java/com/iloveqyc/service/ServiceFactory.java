@@ -24,6 +24,7 @@ public class ServiceFactory {
     }
 
     public static Object getService(String iface, String serviceName, Class<?> serviceClass) {
+        ZookeeperRegistryFactory.getZkRegistry();
         InvokerParam invokerParam = new InvokerParam();
         invokerParam.setIface(iface);
         invokerParam.setServiceName(serviceName);
@@ -37,6 +38,7 @@ public class ServiceFactory {
 
         // 将服务发布到zookeeper上
         publishServices(providerParams, serverParam);
+
     }
 
     private static void startServer(List<ProviderParam> providerParams, ServerParam serverParam) {

@@ -4,8 +4,10 @@ import com.iloveqyc.bean.AirRequest;
 import com.iloveqyc.bean.AirResponse;
 import com.iloveqyc.bean.InvokerParam;
 import com.iloveqyc.bean.ServerParam;
+import com.iloveqyc.constants.PropertyConstant;
 import com.iloveqyc.invoker.AirClient;
 import com.iloveqyc.invoker.AirClientFactory;
+import com.iloveqyc.utils.ConfigLoader;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
@@ -33,7 +35,8 @@ public class ServiceInvocationHandler implements InvocationHandler {
         AirRequest request = buildRequest(method, args);
 
         // TODO 加入zookeeper
-        ServerParam serverParam = new ServerParam("127.0.0.1","4080");
+        // 获取服务器配置
+        ServerParam serverParam = new ServerParam(ConfigLoader.loadPropertyByKey(PropertyConstant.LOCAL_IP),"4080");
         AirClient airClient = AirClientFactory.getAirClient(serverParam);
 
         AirResponse response = airClient.sendRequest(request);
