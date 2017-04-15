@@ -1,5 +1,6 @@
 package com.iloveqyc.zookeeper.client;
 
+import com.iloveqyc.zookeeper.client.listener.ZookeeperEventListener;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.ensemble.EnsembleProvider;
@@ -10,7 +11,6 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,7 +52,7 @@ public class ZookeeperClient {
                 })
                 .build();
         // 添加zk监听器
-        client.getCuratorListenable().addListener(new ZookeeperListener(), listenerPool);
+        client.getCuratorListenable().addListener(new ZookeeperEventListener(), listenerPool);
         // 启动zk客户端
         client.start();
         try {

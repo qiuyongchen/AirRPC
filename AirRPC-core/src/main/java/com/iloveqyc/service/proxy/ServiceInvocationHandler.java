@@ -8,11 +8,14 @@ import com.iloveqyc.constants.PropertyConstant;
 import com.iloveqyc.invoker.AirClient;
 import com.iloveqyc.invoker.AirClientFactory;
 import com.iloveqyc.utils.ConfigLoader;
+import com.iloveqyc.zookeeper.registry.ZookeeperRegistryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,13 +36,17 @@ public class ServiceInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         AirRequest request = buildRequest(method, args);
+        AirResponse response = new AirResponse(request.getRequestId());
 
-        // TODO 加入zookeeper
         // 获取服务器配置
-        ServerParam serverParam = new ServerParam(ConfigLoader.loadPropertyByKey(PropertyConstant.LOCAL_IP),"4080");
+        List<ServerParam> serverParams = ZookeeperRegistryFactory.getZkRegistry().getServiceProvider(invokerParam.getServiceName());
+        if (CollectionUtils.isEmpty(serverParams)) {
+            throw new RuntimeException("no provider for service:" + invokerParam.getServiceName());
+        }
+        ServerParam serverParam = serverParams.get((int) (Math.random() * serverParams.size()));
         AirClient airClient = AirClientFactory.getAirClient(serverParam);
 
-        AirResponse response = airClient.sendRequest(request);
+        response = airClient.sendRequest(request);
 
         if (response == null) {
             return null;

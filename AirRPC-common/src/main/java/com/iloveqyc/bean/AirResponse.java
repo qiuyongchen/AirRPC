@@ -30,4 +30,11 @@ public class AirResponse implements Serializable {
      */
     private Exception e;
 
+    public AirResponse() {
+    }
+
+    public AirResponse(String requestId) {
+        this.requestId = requestId;
+    }
+
 }

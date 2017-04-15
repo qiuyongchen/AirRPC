@@ -1,4 +1,4 @@
-package com.iloveqyc.zookeeper.registry;
+package com.iloveqyc.zookeeper.registry.listener;
 
 /**
  * User: qiuyongchen Nicolas.David
