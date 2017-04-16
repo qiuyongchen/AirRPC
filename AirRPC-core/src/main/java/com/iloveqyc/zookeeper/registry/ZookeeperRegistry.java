@@ -1,17 +1,15 @@
 package com.iloveqyc.zookeeper.registry;
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.iloveqyc.bean.ServerParam;
 import com.iloveqyc.constants.PropertyConstant;
-import com.iloveqyc.zookeeper.client.ZookeeperClient;
-import io.netty.util.internal.StringUtil;
+import com.iloveqyc.zookeeper.zkclient.ZookeeperClient;
+import com.iloveqyc.zookeeper.util.HostUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -93,24 +91,7 @@ public class ZookeeperRegistry {
         if (CollectionUtils.isEmpty(serviceProvider)) {
             // 从zk上获取服务的所有提供者地址
             String zkServicePath = PropertyConstant.ZK_PATH + "/" + serviceName;
-            String serviceAddrs = client.get(zkServicePath);
-            if (StringUtils.isEmpty(serviceAddrs)) {
-                return Lists.newArrayList();
-            }
-
-            // 解析服务提供者的ip和port
-            String[] addrArray = serviceAddrs.split(" ");
-            List<String> addrList = Lists.newArrayList();
-            addrList.addAll(Arrays.asList(addrArray));
-            serviceProvider = Lists.newArrayList();
-            for (String addr : addrList) {
-                String[] ipPort = addr.split(":");
-                ServerParam param = new ServerParam(ipPort[0], ipPort[1]);
-                if (!serviceProvider.contains(param)) {
-                    serviceProvider.add(param);
-                }
-            }
-
+            serviceProvider = HostUtil.buildChangeHostSet(client, zkServicePath);
             cachedServices.put(serviceName, serviceProvider);
         }
         return serviceProvider;

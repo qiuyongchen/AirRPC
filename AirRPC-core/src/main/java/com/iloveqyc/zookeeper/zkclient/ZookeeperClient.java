@@ -1,6 +1,6 @@
-package com.iloveqyc.zookeeper.client;
+package com.iloveqyc.zookeeper.zkclient;
 
-import com.iloveqyc.zookeeper.client.listener.ZookeeperEventListener;
+import com.iloveqyc.zookeeper.zkclient.listener.ZookeeperEventListener;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.ensemble.EnsembleProvider;
@@ -33,8 +33,8 @@ public class ZookeeperClient {
         this.zkAddress = zkAddress;
         // 构建zk客户端
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .sessionTimeoutMs(30 * 1000)
-                .connectionTimeoutMs(15 * 1000)
+                .sessionTimeoutMs(30 * 1000 * 1000)
+                .connectionTimeoutMs(15 * 1000 * 1000)
                 .retryPolicy(new ExponentialBackoffRetry(1000, Integer.MAX_VALUE))
                 .ensembleProvider(new EnsembleProvider() {
                     @Override
@@ -52,7 +52,7 @@ public class ZookeeperClient {
                 })
                 .build();
         // 添加zk监听器
-        client.getCuratorListenable().addListener(new ZookeeperEventListener(), listenerPool);
+        client.getCuratorListenable().addListener(new ZookeeperEventListener(this), listenerPool);
         // 启动zk客户端
         client.start();
         try {

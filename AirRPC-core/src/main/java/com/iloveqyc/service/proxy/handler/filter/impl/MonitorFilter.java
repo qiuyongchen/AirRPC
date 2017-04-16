@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MonitorFilter implements Filter {
 
     @Override
-    public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) {
+    public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) throws Exception {
         log.info("调用了MonitorFilter, invocationHandler:{}, context:{}", invocationHandler, context);
         return invocationHandler.invoke(context);
     }

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoadBalanceFilter implements Filter {
 
     @Override
-    public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) {
+    public Object invoke(FilterInvocationHandler invocationHandler, InvocationContext context) throws Exception {
         log.info("调用了LoadBalanceFilter, invocationHandler:{}, context:{}", invocationHandler, context);
         return invocationHandler.invoke(context);
     }

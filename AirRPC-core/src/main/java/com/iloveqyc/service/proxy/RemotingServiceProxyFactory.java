@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 2017/4/9
  * Time: 下午5:03
  * Usage: 远程服务接口的代理
+ *        该服务代理已缓存
  */
 @Slf4j
 public class RemotingServiceProxyFactory {
