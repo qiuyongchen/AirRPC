@@ -13,3 +13,11 @@ hs_err_pid*
 *.iml
 *.lst
 sample-client/target
+AirRPC-all/target
+AirRPC-common/target
+AirRPC-core/target
+AirRPC-netty/target
+AirRPC-zookeeper/target/failsafe-reports
+AirRPC-zookeeper/target
+sample-api/target
+target

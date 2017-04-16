@@ -21,7 +21,7 @@ public class testClient {
     public static void main(String[] args) {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("AirClient.xml");
         final ILoveYouService iLoveYouService = (ILoveYouService) applicationContext.getBean("iLoveYouService");
-        System.out.println(iLoveYouService.iLoveYou("邱永臣", "陆莎"));
+        System.out.println(iLoveYouService.iLoveYou("qiuyongchen", "lusha"));
 
 //        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 1000L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100000));
 //

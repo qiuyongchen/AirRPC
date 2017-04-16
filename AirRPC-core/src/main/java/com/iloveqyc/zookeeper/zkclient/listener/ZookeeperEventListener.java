@@ -7,6 +7,7 @@ import com.iloveqyc.zookeeper.registry.listener.RegistryEventListener;
 import com.iloveqyc.zookeeper.registry.listener.impl.DefaultRegistryEventListener;
 import com.iloveqyc.zookeeper.util.HostUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorListener;
@@ -26,10 +27,11 @@ public class ZookeeperEventListener implements CuratorListener {
 
     private ZookeeperClient client;
 
-    private RegistryEventListener registryEventListener = new DefaultRegistryEventListener();
+    private RegistryEventListener registryEventListener;
 
     public ZookeeperEventListener(ZookeeperClient client) {
         this.client = client;
+        this.registryEventListener = new DefaultRegistryEventListener();
     }
 
     @Override
@@ -47,12 +49,14 @@ public class ZookeeperEventListener implements CuratorListener {
 
     private void handleNodeEvent(WatchedEvent event) {
         String changedPath = event.getPath();
+        if (StringUtils.isEmpty(changedPath)) {
+            return;
+        }
         if (changedPath.startsWith(PropertyConstant.ZK_PATH)) {
             String serviceName = changedPath.substring(PropertyConstant.ZK_PATH.length() + 1);
             client.get(changedPath);
             List<ServerParam> hosts = HostUtil.buildChangeHostSet(client, changedPath);
             registryEventListener.onServiceChanged(serviceName, hosts);
-
         }
     }
 

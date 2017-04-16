@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.iloveqyc.bean.ServerParam;
 import com.iloveqyc.constants.PropertyConstant;
+import com.iloveqyc.zookeeper.registry.listener.impl.DefaultRegistryEventListener;
+import com.iloveqyc.zookeeper.registry.listener.impl.DefaultServiceChangeListener;
 import com.iloveqyc.zookeeper.zkclient.ZookeeperClient;
 import com.iloveqyc.zookeeper.util.HostUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,8 @@ public class ZookeeperRegistry {
             synchronized (ZookeeperRegistry.class) {
                 if (!isInit) {
                     client = new ZookeeperClient(zkAddress);
+                    // 监听服务注册中心的服务变化
+                    DefaultRegistryEventListener.addServiceListener(new DefaultServiceChangeListener());
                     isInit = true;
                 }
             }
@@ -89,11 +93,52 @@ public class ZookeeperRegistry {
         List<ServerParam> serviceProvider = cachedServices.get(serviceName);
 
         if (CollectionUtils.isEmpty(serviceProvider)) {
+
             // 从zk上获取服务的所有提供者地址
             String zkServicePath = PropertyConstant.ZK_PATH + "/" + serviceName;
             serviceProvider = HostUtil.buildChangeHostSet(client, zkServicePath);
+
             cachedServices.put(serviceName, serviceProvider);
         }
         return serviceProvider;
     }
+
+    /**
+     * 获取服务的本地缓存提供者
+     * @param serviceName 服务名称
+     * @return 服务提供者
+     */
+    public List<ServerParam> getLocalCacheServiceProvider(String serviceName) {
+        List<ServerParam> serverParams = cachedServices.get(serviceName);
+
+        if (CollectionUtils.isEmpty(serverParams)) {
+            return Lists.newArrayList();
+        }
+
+        return serverParams;
+    }
+
+    public void addLocalCacheServiceProvider(String serviceName, ServerParam provider) {
+        List<ServerParam> serverParams = cachedServices.get(serviceName);
+        if (CollectionUtils.isEmpty(serverParams)) {
+            serverParams = Lists.newArrayList(provider);
+        } else {
+            if (!serverParams.contains(provider)) {
+                log.info("addLocalCacheServiceProvider, serviceName:{}, provider:{}", serviceName, provider);
+                serverParams.add(provider);
+            }
+        }
+        cachedServices.put(serviceName, serverParams);
+    }
+
+    public void deleteLocalCacheServiceProvider(String serviceName, ServerParam provider) {
+        List<ServerParam> serverParams = cachedServices.get(serviceName);
+        if (CollectionUtils.isNotEmpty(serverParams)) {
+            if (serverParams.contains(provider)) {
+                log.info("deleteLocalCacheServiceProvider, serviceName:{}, provider:{}", serviceName, provider);
+                serverParams.remove(provider);
+            }
+        }
+    }
+
 }
