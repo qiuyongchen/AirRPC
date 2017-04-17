@@ -34,6 +34,8 @@ public class AirClient {
     // 存储某个request和其response
     private Map<String, LinkedBlockingQueue<AirResponse>> requestResponseMap = new ConcurrentHashMap<>(20);
 
+    private ServerParam serverParam;
+
     /**
      * 启动一个netty客户端
      */
@@ -41,6 +43,7 @@ public class AirClient {
         if (isActive) {
             return;
         }
+        this.serverParam = serverParam;
         Bootstrap bootstrap = new Bootstrap();
         // 将group绑定在netty客户端上下文里
         // 注：每个netty客户端与不同的netty服务端连接，所有的netty客户端共用一个group，共用一套线程池
@@ -121,4 +124,9 @@ public class AirClient {
         LinkedBlockingQueue<AirResponse> blockingQueue = requestResponseMap.get(response.getRequestId());
         blockingQueue.add(response);
     }
+
+    public ServerParam getServerParam() {
+        return serverParam;
+    }
+
 }

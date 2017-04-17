@@ -16,6 +16,11 @@ public class AirResponse implements Serializable {
     private static final long serialVersionUID = 8380079647192110098L;
 
     /**
+     * AirRPC内部的心跳监测序列
+     */
+    private long hearBeatSeq;
+
+    /**
      * request的唯一标注
      */
     private String requestId;

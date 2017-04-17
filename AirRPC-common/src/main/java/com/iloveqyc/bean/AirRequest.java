@@ -1,5 +1,6 @@
 package com.iloveqyc.bean;
 
+import com.iloveqyc.constants.MsgConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,6 +15,17 @@ import java.io.Serializable;
 public class AirRequest implements Serializable {
 
     private static final long serialVersionUID = -5199456502650083949L;
+
+    /**
+     * AirRPC内部的通信类型
+     * @see com.iloveqyc.constants.MsgConstant
+     */
+    private int msgType = MsgConstant.MSG_TYPE_SERVICE;
+
+    /**
+     * AirRPC内部的心跳监测序列
+     */
+    private long heartBeatSeq;
 
     /**
      * request的唯一标注

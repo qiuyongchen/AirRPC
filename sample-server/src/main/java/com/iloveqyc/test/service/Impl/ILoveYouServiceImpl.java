@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  */
 public class ILoveYouServiceImpl implements ILoveYouService {
     public String iLoveYou(String yourName, String yourLoverName) {
-        return "这是" + yourName + "给他女朋友" + yourLoverName + "写的接口回复哦";
+        return "this is " + yourName + "'s love letter for his girlfriend " + yourLoverName + " hahaha";
     }
 }

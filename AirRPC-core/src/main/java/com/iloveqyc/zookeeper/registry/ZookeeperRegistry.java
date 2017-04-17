@@ -141,4 +141,20 @@ public class ZookeeperRegistry {
         }
     }
 
+    /**
+     * 扫描所有的缓存起来的服务，删除某个server
+     * @param provider
+     */
+    public void deleteLocalCacheServiceProviderWithoutServiceName(ServerParam provider) {
+        for (String serviceName : cachedServices.keySet()) {
+            List<ServerParam> serverParams = cachedServices.get(serviceName);
+            if (CollectionUtils.isEmpty(serverParams)) {
+                continue;
+            }
+            if (serverParams.contains(provider)) {
+                serverParams.remove(provider);
+            }
+        }
+    }
+
 }

@@ -15,6 +15,10 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <guava-version>16.0.1</guava-version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.iloveqyc</groupId>
@@ -56,6 +60,12 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava-version}</version>
         </dependency>
 
     </dependencies>
