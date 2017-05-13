@@ -27,8 +27,6 @@ public class RemotingServiceProxyFactory {
      * TODO 获取的代理类应当可以根据服务提供者的上下线而自动变化，目前默认仅有一个服务提供者
      */
     public Object getProxy(InvokerParam invokerParam) {
-        // 获取接口前先连接zookeeper
-        ZookeeperRegistryFactory.getZkRegistry();
 
         Object serviceProxy = proxys.get(invokerParam);
         if (serviceProxy != null) {

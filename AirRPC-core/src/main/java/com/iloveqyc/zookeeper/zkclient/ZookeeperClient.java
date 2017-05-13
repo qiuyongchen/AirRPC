@@ -33,8 +33,8 @@ public class ZookeeperClient {
         this.zkAddress = zkAddress;
         // 构建zk客户端
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .sessionTimeoutMs(30 * 1000 * 1000)
-                .connectionTimeoutMs(15 * 1000 * 1000)
+                .sessionTimeoutMs(30 * 1000)
+                .connectionTimeoutMs(15 * 1000)
                 .retryPolicy(new ExponentialBackoffRetry(1000, Integer.MAX_VALUE))
                 .ensembleProvider(new EnsembleProvider() {
                     @Override

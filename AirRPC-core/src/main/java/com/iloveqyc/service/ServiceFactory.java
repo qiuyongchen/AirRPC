@@ -3,9 +3,15 @@ package com.iloveqyc.service;
 import com.iloveqyc.bean.InvokerParam;
 import com.iloveqyc.bean.ProviderParam;
 import com.iloveqyc.bean.ServerParam;
+import com.iloveqyc.invoker.AirClient;
+import com.iloveqyc.invoker.AirClientFactory;
 import com.iloveqyc.provider.AirServerFactory;
+import com.iloveqyc.service.invoker.ClientManager;
 import com.iloveqyc.service.proxy.RemotingServiceProxyFactory;
+import com.iloveqyc.zookeeper.registry.ZookeeperRegistry;
 import com.iloveqyc.zookeeper.registry.ZookeeperRegistryFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 
@@ -15,6 +21,7 @@ import java.util.List;
  * Time: 上午4:11
  * Usage: xxx
  */
+@Slf4j
 public class ServiceFactory {
 
     private static RemotingServiceProxyFactory remotingServiceProxyFactory;
@@ -24,7 +31,16 @@ public class ServiceFactory {
     }
 
     public static Object getService(String iface, String serviceName, Class<?> serviceClass) {
-        ZookeeperRegistryFactory.getZkRegistry();
+        // 初始化服务提供端
+        List<ServerParam> serverParams = ZookeeperRegistryFactory.getZkRegistry().
+                getServiceProvider(serviceName);
+        if (CollectionUtils.isEmpty(serverParams)) {
+            throw new RuntimeException("no provider for service:" + serviceName);
+        }
+        for (ServerParam serverParam : serverParams) {
+            ClientManager.getAirClient(serverParam);
+        }
+
         InvokerParam invokerParam = new InvokerParam();
         invokerParam.setIface(iface);
         invokerParam.setServiceName(serviceName);

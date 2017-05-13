@@ -3,6 +3,7 @@ package com.iloveqyc.provider.process.task;
 import com.iloveqyc.bean.AirRequest;
 import com.iloveqyc.bean.AirResponse;
 import com.iloveqyc.bean.ProviderParam;
+import com.iloveqyc.constants.MsgConstant;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -10,12 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.reflect.FastClass;
 import net.sf.cglib.reflect.FastMethod;
 
-
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
@@ -45,11 +41,18 @@ public class RequestTask implements Callable {
 
         final AirResponse response = new AirResponse();
         response.setRequestId(request.getRequestId());
-        try {
-            Object rlt = doHandleRequest();
-            response.setResult(rlt);
-        } catch (Exception e) {
-            response.setE(e);
+
+        if (request.getMsgType() == MsgConstant.MSG_TYPE_HEART_BEAT) {
+            // 心跳请求
+            response.setHearBeatSeq(request.getHeartBeatSeq());
+        } else if (request.getMsgType() == MsgConstant.MSG_TYPE_SERVICE) {
+            // 服务请求
+            try {
+                Object rlt = doHandleRequest();
+                response.setResult(rlt);
+            } catch (Exception e) {
+                response.setE(e);
+            }
         }
 
         // 将response传回客户端
